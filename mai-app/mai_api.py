@@ -1,21 +1,23 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
+import random
 
 app = FastAPI()
 
-class ChatRequest(BaseModel):
+# Modèle de données pour recevoir un message
+class Message(BaseModel):
     message: str
 
+# Exemple de réponses de M'AI
+responses = [
+    "Salut ! Comment puis-je t'aider ?",
+    "Bonjour, que puis-je faire pour toi ?",
+    "Salut, comment ça va ?",
+    "Bienvenue, comment puis-je être utile ?"
+]
+
 @app.post("/chat")
-async def chat_endpoint(request: ChatRequest):
-    user_message = request.message.lower()
-
-    # Réponse basique
-    if "bonjour" in user_message:
-        bot_response = "Salut ! Comment puis-je t'aider ?"
-    elif "ça va" in user_message:
-        bot_response = "Je vais bien, merci ! Et toi ?"
-    else:
-        bot_response = "Désolé, je ne comprends pas encore cette demande."
-
-    return {"response": bot_response}
+async def chat(message: Message):
+    # Répondre avec une réponse aléatoire
+    response = random.choice(responses)
+    return {"response": response}
